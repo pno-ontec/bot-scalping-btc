@@ -13,8 +13,7 @@ import anthropic
 
 # Proxy Tor — necessário para Binance em VPS nos EUA
 # OKX não precisa de proxy — acesso direto
-os.environ['HTTP_PROXY']  = 'socks5h://127.0.0.1:9050'
-os.environ['HTTPS_PROXY'] = 'socks5h://127.0.0.1:9050'
+# Oracle Cloud SP — sem proxy Tor necessario
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
 
@@ -37,10 +36,9 @@ class BinanceExchange:
 
     def _conectar(self, max_t=8):
         from binance.client import Client
-        proxies = {"http":"socks5h://127.0.0.1:9050","https":"socks5h://127.0.0.1:9050"}
         for i in range(1, max_t+1):
             try:
-                c = Client(self._key, self._secret, requests_params={"proxies":proxies})
+                c = Client(self._key, self._secret)
                 self.log.info(f"[BINANCE][TOR] Conectada (tentativa {i})")
                 return c
             except Exception as e:
